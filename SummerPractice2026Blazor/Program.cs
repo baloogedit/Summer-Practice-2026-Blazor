@@ -7,6 +7,9 @@ using SummerPractice2026Blazor.Components.Account;
 using SummerPractice2026Blazor.Repository.Entities;
 using SummerPractice2026Blazor.Repository;
 using SummerPractice2026Blazor.Services;
+using SummerPractice2026Blazor.Repository.Interfaces;
+using FluentValidation;
+using SummerPractice2026Blazor.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +23,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuth
 builder.Services.AddScoped<ArticleImageService>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddScoped<DialogService>();
+builder.Services.AddScoped<IArticleCategoryRepository, ArticleCategoryRepository>();
+builder.Services.AddValidatorsFromAssemblyContaining<ArticleCategoryValidator>();
 
 builder.Services.AddAuthentication(options =>
     {
