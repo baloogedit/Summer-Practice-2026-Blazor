@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/SummerPractice2026Blazor/bin/Debug/net10.0
+/SummerPractice2026Blazor/obj
+/SummerPractice2026Blazor/article_management.db-shm
+/SummerPractice2026Blazor/article_management.db-wal
+/.vs/SummerPractice2026Blazor.slnx
+/.vs/CopilotSnapshots/C773AF7875820544B66BDAA3ED46BF16
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db-wal
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db-wal
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/SemanticSymbols.db
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/SemanticSymbols.db
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.5.39194.52559/CodeChunks.db-shm
+/.vs/SummerPractice2026Blazor/CopilotIndices/18.7.1244.59975
