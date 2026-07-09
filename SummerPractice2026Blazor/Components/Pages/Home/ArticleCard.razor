@@ -1,0 +1,23 @@
+﻿@using SummerPractice2026Blazor.Repository.Entities;
+@using SummerPractice2026Blazor.Components.Shared;
+
+<div class="article-card">
+    <div class="price">@Item.Price.ToString("0.0")$</div>
+
+    <img src="@Item.ImageUrl" alt="@Item.Name" />
+
+    <h3>@Item.Name</h3>
+
+    <Button>Add To Cart</Button>
+
+    <p>@Item.Description</p>
+
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public Article Item{get; set;}
+
+
+
+}

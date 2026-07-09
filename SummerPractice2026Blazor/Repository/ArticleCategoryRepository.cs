@@ -1,48 +1,47 @@
-﻿using SummerPractice2026Blazor.Repository.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SummerPractice2026Blazor.Repository.Entities;
 using SummerPractice2026Blazor.Repository.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
-namespace SummerPractice2026Blazor.Repository;
-public class ArticleCategoryRepository(ApplicationDbContext dbContext) : IArticleCategoryRepository
+namespace SummerPractice2026Blazor.Repository
 {
-    public async Task<ArticleCategory> CreateArticleCategory(ArticleCategory articleCategory)
+    public class ArticleCategoryRepository(ApplicationDbContext dbContext) : IArticleCategoryRepository
     {
-        dbContext.ArticleCategories.Add(articleCategory);
-        await dbContext.SaveChangesAsync();
+        public async Task<ArticleCategory> CreateArticleCategory(ArticleCategory articleCategory)
+        {
+            dbContext.ArticleCategories.Add(articleCategory);
+            await dbContext.SaveChangesAsync();
+            return articleCategory;
+        }
 
-        return articleCategory;
+        public async Task<bool> DeleteArticleCategory(Guid id)
+        {
+            var articleCategoryFromDb = await dbContext.ArticleCategories.FirstOrDefaultAsync(x => x.Id == id);
+            if (articleCategoryFromDb is null)
+            {
+                return false;
+            }
+
+            dbContext.ArticleCategories.Remove(articleCategoryFromDb);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<List<ArticleCategory>> GetAllArticleCategories()
+        {
+            return await dbContext.ArticleCategories.ToListAsync();
+        }
+
+        public async Task<ArticleCategory> GetArticleCategoryById(Guid id)
+        {
+            var articleCategoryFromDb = await dbContext.ArticleCategories.FirstOrDefaultAsync(x => x.Id == id);
+            return articleCategoryFromDb ?? new ArticleCategory();
+        }
+
+        public async Task<ArticleCategory> UpdateArticleCategory(ArticleCategory articleCategory)
+        {
+            dbContext.ArticleCategories.Update(articleCategory);
+            await dbContext.SaveChangesAsync();
+            return articleCategory;
+        }
     }
-
-    public async Task<bool> DeleteArticleCategory(Guid id)
-    {
-        var articleCategoryFromDb= await dbContext.ArticleCategories.FirstOrDefaultAsync(x => x.Id == id);
-        
-        if(articleCategoryFromDb==null)
-            return false;
-
-        dbContext.ArticleCategories.Remove(articleCategoryFromDb);
-        await dbContext.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<List<ArticleCategory>> GetAllArticleCategory()
-    {
-        return await dbContext.ArticleCategories.ToListAsync();
-    }
-
-    public async Task<ArticleCategory> UpdateArticleCategory(ArticleCategory articleCategory)
-    {
-        dbContext.ArticleCategories.Update(articleCategory);
-        await dbContext.SaveChangesAsync();
-        return articleCategory;
-    }
-
-    public async Task<ArticleCategory> GetArticleCategoryById(Guid id)
-    {
-        var articleCategoryFromDb = await dbContext.ArticleCategories.FirstOrDefaultAsync(x => x.Id == id);
-
-        return articleCategoryFromDb ?? new ArticleCategory();
-    }
-
-
 }

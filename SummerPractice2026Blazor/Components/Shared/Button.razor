@@ -1,14 +1,13 @@
 ﻿<button type="@Type"
         class="@Class"
-        disabled="@Disabled"
+        disabled="@IsDisabled"
         title="@Title"
-    @onclick="@HandleClickAsync">
-    @if (ChildContent is not null)  
+        @onclick="@HandleClickAsync">
+    @if (ChildContent is not null)
     {
         @ChildContent
     }
 </button>
-
 @code {
     [Parameter]
     public string Type { get; set; } = "button";
@@ -30,7 +29,6 @@
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
-
 
     private bool IsDisabled => Disabled || (CanExecute != null && !CanExecute.Invoke());
 

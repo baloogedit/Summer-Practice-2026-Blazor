@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using SummerPractice2026Blazor.Repository.Entities
+@using SummerPractice2026Blazor.Constants
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -14,6 +15,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject RoleManager<IdentityRole> RoleManager
 
 <PageTitle>Register</PageTitle>
 
@@ -42,6 +44,17 @@
         <label for="Input.ConfirmPassword">Confirm Password</label>
         <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
       </div>
+      <div class="form-floating mb3">
+          <InputSelect @bind-Value="Input.Role" class="form-select">
+              <option value="@CustomRoles.Role_User" selected>
+                    @CustomRoles.Role_User
+              </option>
+              <option value="@CustomRoles.Role_Admin">
+                    @CustomRoles.Role_Admin
+              </option>
+          </InputSelect>
+          <label for="Input.Role">Select Role</label>
+      </div>
       <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
     </EditForm>
   </div>
@@ -55,35 +68,51 @@
 </div>
 
 @code {
-  private IEnumerable<IdentityError>? identityErrors;
+    private IEnumerable<IdentityError>? identityErrors;
 
-  [SupplyParameterFromForm]
-  private InputModel Input { get; set; } = default!;
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = default!;
 
-  [SupplyParameterFromQuery]
-  private string? ReturnUrl { get; set; }
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
 
-  private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
+    private string? Message => identityErrors is null ? null : $"Error: {string.Join(", ", identityErrors.Select(error => error.Description))}";
 
-  protected override void OnInitialized()
-  {
-    Input ??= new();
-  }
-
-  public async Task RegisterUser(EditContext editContext)
-  {
-    var user = CreateUser();
-
-    await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-    var emailStore = GetEmailStore();
-    await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-    var result = await UserManager.CreateAsync(user, Input.Password);
-
-    if (!result.Succeeded)
+    protected override void OnInitialized()
     {
-      identityErrors = result.Errors;
-      return;
+        Input ??= new();
     }
+
+    public async Task RegisterUser(EditContext editContext)
+    {
+        var user = CreateUser();
+
+        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+        var emailStore = GetEmailStore();
+        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        var result = await UserManager.CreateAsync(user, Input.Password);
+
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            return;
+        }
+
+        if (!await RoleManager.RoleExistsAsync(CustomRoles.Role_User))
+        {
+            await RoleManager.CreateAsync(new IdentityRole(CustomRoles.Role_User));
+            await RoleManager.CreateAsync(new IdentityRole(CustomRoles.Role_Admin));
+        }
+
+        if(Input.Role !=null)
+        {
+            await UserManager.AddToRoleAsync(user, Input.Role);
+        }
+        else
+        {
+            await UserManager.AddToRoleAsync(user, CustomRoles.Role_User);
+        }
+
 
     Logger.LogInformation("User created a new account with password.");
 
@@ -148,5 +177,7 @@
     [Display(Name = "Confirm password")]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; } = "";
+
+    public string? Role { get; set; } = CustomRoles.Role_User;
   }
 }

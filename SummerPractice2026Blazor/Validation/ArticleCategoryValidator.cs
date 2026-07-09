@@ -8,9 +8,8 @@ namespace SummerPractice2026Blazor.Validation
         public ArticleCategoryValidator()
         {
             RuleFor(x => x.Name)
-            .NotEmpty().WithMessage("Name is requiered.")
-            .MaximumLength(100).WithMessage("The Name cannot be over 100 characters");
+              .NotEmpty().WithMessage("Name is required.")
+              .MaximumLength(100).WithMessage("Name cannot exceed 100 characters.");
         }
-
     }
 }

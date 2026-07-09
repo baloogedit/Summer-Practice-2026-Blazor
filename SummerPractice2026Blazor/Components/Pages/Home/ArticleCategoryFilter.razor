@@ -1,0 +1,47 @@
+﻿@using SummerPractice2026Blazor.Repository.Interfaces
+@using SummerPractice2026Blazor.Repository.Entities
+@using SummerPractice2026Blazor.Components.Shared
+
+@inject IArticleCategoryRepository articleCategoryRepository
+
+<div class="category-filter">
+    <Button Class="@GetButtonClass(null)"
+            OnClick="@(() => SelectCategory(null))">
+        All
+    </Button>
+    @foreach(var category in ArticleCategories)
+    {
+        <Button class="@GetButtonClass(category.Id)"
+                OnClick="@(() => SelectCategory(category.Id))">
+            @category.Name
+        </Button>
+    }
+</div>
+
+
+@code {
+    [Parameter]
+    public EventCallback<Guid?> OnCategorySelected { get; set; }
+
+    private IEnumerable<ArticleCategory> ArticleCategories { get; set; } = [];
+
+    private Guid? selectedCategoryId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ArticleCategories = await articleCategoryRepository.GetAllArticleCategories();
+    }
+
+    private async Task SelectCategory(Guid? categoryId)
+    {
+        selectedCategoryId = categoryId;
+        await OnCategorySelected.InvokeAsync(categoryId);
+    }
+
+    private string GetButtonClass(Guid? categoryId)
+    {
+        return selectedCategoryId == categoryId
+        ? "btn btn-primary"
+        : "btn btn-secondary";
+    }
+}

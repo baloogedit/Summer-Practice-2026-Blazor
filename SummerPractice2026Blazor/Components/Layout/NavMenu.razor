@@ -1,5 +1,5 @@
-﻿@implements IDisposable
-
+﻿@using SummerPractice2026Blazor.Constants
+@implements IDisposable
 @inject NavigationManager NavigationManager
 
 <div class="top-row navbar navbar-dark">
@@ -13,12 +13,29 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
         <AuthorizeView>
+        <div class="nav-item">
+            <NavLink class="nav-link" href="home">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        </AuthorizeView>
+
+        <AuthorizeView Roles="@CustomRoles.Role_Admin">
+        <div class="nav-item">
+            <NavLink class="nav-link" href="article-category">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> ArticleCategory
+            </NavLink>
+        </div>
+        <div class="nav-item">
+            <NavLink class="nav-link" href="article">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Articles
+            </NavLink>
+        </div>
+        </AuthorizeView>
+
+
+        <AuthorizeView>
             <Authorized>
-                <div class="nav-item">
-                    <NavLink class="nav-link" href="article-category">
-                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> ArticleCategory
-                    </NavLink>
-                </div>
                 <div class="nav-item">
                     <NavLink class="nav-link" href="Account/Manage">
                         <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name

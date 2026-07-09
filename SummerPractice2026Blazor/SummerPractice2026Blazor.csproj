@@ -22,7 +22,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Constants\" />
 		<Folder Include="wwwroot\images\article\" />
 		<Folder Include="wwwroot\lib\bootstrap\dist\css\" />
 		<Folder Include="wwwroot\lib\bootstrap\dist\js\" />

@@ -1,0 +1,87 @@
+﻿@using SummerPractice2026Blazor.Repository.Interfaces
+@using SummerPractice2026Blazor.Repository.Entities
+
+@inject IArticleRepository articleRepository
+
+
+<div class="article-list-container">
+    <ArticleCategoryFilter OnCategorySelected="FilterByCategory"/>
+    <div class="article-list">
+    @if (isLoading)
+    {
+        <div class="loading-overlay">
+            <img src="/images/loadig.gif" alt="Loading" />
+        </div>
+    }
+    else
+    {
+        @foreach (var article in FilteredArticles)
+        {
+            <ArticleCard Item="article"/>
+        }
+    }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string SearchText { get; set; } = string.Empty;
+
+    private bool isLoading;
+
+    private IEnumerable<Article> Articles { get; set; } = [];
+    private IEnumerable<Article> FilteredArticles { get; set; } = [];
+
+    private Guid? SelectedCategoryId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        Articles = await articleRepository.GetAllArticles();
+        isLoading = false;
+    }
+
+    protected override void OnParametersSet()
+    {
+        ApplyFilters();
+    }
+
+    private async Task asyncLoadArticles()
+    {
+
+        Articles = await articleRepository.GetAllArticles();
+        ApplyFilters();
+    }
+
+
+    private void FilterByCategory(Guid? categoryId)
+    {
+        isLoading=true;
+        SelectedCategoryId = categoryId;
+        ApplyFilters();
+        isLoading = false;
+    }
+
+    private void ApplyFilters()
+    {
+        var query = Articles.AsEnumerable();
+
+        if(SelectedCategoryId != null)
+        {
+            query = query.Where(article => article.ArticleCategoryId == SelectedCategoryId);
+        }
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            query = query.Where(article =>
+                article.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase) ||
+                (article.Description != null &&
+                article.Description.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+        );
+        }
+
+
+        FilteredArticles = query;
+
+    }
+}

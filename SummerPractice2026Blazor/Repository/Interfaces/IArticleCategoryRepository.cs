@@ -1,15 +1,18 @@
 ﻿using SummerPractice2026Blazor.Repository.Entities;
 
-namespace SummerPractice2026Blazor.Repository.Interfaces;
-public interface IArticleCategoryRepository
+namespace SummerPractice2026Blazor.Repository.Interfaces
 {
-    Task<ArticleCategory> CreateArticleCategory(ArticleCategory articleCategory);
+    public interface IArticleCategoryRepository
+    {
+        Task<ArticleCategory> CreateArticleCategory(ArticleCategory articleCategory);
 
-    Task<bool> DeleteArticleCategory(Guid id);
+        Task<bool> DeleteArticleCategory(Guid id);
 
-    Task<List<ArticleCategory>> GetAllArticleCategory();
+        Task<List<ArticleCategory>> GetAllArticleCategories();
 
-    Task<ArticleCategory> UpdateArticleCategory(ArticleCategory articleCategory);
+        Task<ArticleCategory> GetArticleCategoryById(Guid id);
 
-    Task<ArticleCategory> GetArticleCategoryById(Guid id);
+        Task<ArticleCategory> UpdateArticleCategory(ArticleCategory articleCategory);
+    }
 }
+

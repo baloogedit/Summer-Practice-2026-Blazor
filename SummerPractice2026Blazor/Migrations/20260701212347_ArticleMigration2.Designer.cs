@@ -11,7 +11,7 @@ using SummerPractice2026Blazor.Repository;
 namespace SummerPractice2026Blazor.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260701123045_ArticleMigration2")]
+    [Migration("20260701212347_ArticleMigration2")]
     partial class ArticleMigration2
     {
         /// <inheritdoc />

@@ -39,7 +39,7 @@ namespace SummerPractice2026Blazor.Migrations
                 table: "Articles",
                 column: "ArticleCategoryId");
 
-
+            InitialDataGenerator.AddInitialData(ref migrationBuilder);
         }
 
         /// <inheritdoc />

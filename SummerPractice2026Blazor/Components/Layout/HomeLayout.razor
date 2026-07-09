@@ -1,0 +1,25 @@
+﻿@inherits LayoutComponentBase
+
+<div class="home-layout">
+    <header class="home-header">
+        <nav class="homa-nav">
+            <a href="/" class="home-brand">Article Management</a>
+            <div class="home-nav-links">
+                <AuthorizeView>
+                    <Authorized>
+                        <a href="/">Back</a>
+                    </Authorized>
+                    <NotAuthorized>
+                        <a href="/Account/Login">Login</a>
+                        <a href="/Account/Register">Register</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+        </nav>
+    </header>
+
+
+    <main class="home-main">
+        @Body
+    </main>
+</div>
